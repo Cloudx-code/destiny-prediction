@@ -122,7 +122,8 @@
 
     <script>
         let retryCount = 0;
-        const maxRetries = 3;
+        const maxRetries = 60;  
+        const pollInterval = 5000;  
         let predictionInProgress = false;
 
         async function predict() {
@@ -215,7 +216,7 @@
                 } else {
                     // 继续轮询
                     retryCount++;
-                    setTimeout(pollPrediction, 3000);
+                    setTimeout(pollPrediction, pollInterval);
                 }
                 
             } catch (error) {

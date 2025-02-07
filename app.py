@@ -90,7 +90,7 @@ def call_zhipu_api(user_data, result_queue):
             "https://open.bigmodel.cn/api/paas/v4/chat/completions",
             headers=headers,
             json=request_data,
-            timeout=8  # 确保在 Vercel 10秒限制内完成
+            timeout=240  # 设置为4分钟，留出一些缓冲时间
         )
         
         if response.status_code == 200:
