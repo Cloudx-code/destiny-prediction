@@ -100,8 +100,15 @@ def generate_ai_prediction(user_data):
             response = requests.post(
                 "https://open.bigmodel.cn/api/paas/v4/chat/completions",
                 headers=headers,
-                json=request_data
+                json=request_data,
+                timeout=30  # 添加超时设置
             )
+            
+            print(f"API响应状态码: {response.status_code}")
+            print(f"API响应内容: {response.text}")
+            
+            # 检查响应状态码
+            response.raise_for_status()
             
             response_json = response.json()
             print(f"智谱AI原始响应: {json.dumps(response_json, ensure_ascii=False)}")
@@ -140,6 +147,11 @@ def generate_ai_prediction(user_data):
                 print(f"智谱AI返回错误状态码: {response.status_code}")
                 print(f"错误信息: {response_json.get('error', {}).get('message', 'Unknown error')}")
                 
+        except requests.exceptions.RequestException as request_error:
+            print(f"发送HTTP请求时发生错误: {str(request_error)}")
+            import traceback
+            print(f"HTTP请求错误详情:\n{traceback.format_exc()}")
+        
         except Exception as api_error:
             print(f"调用智谱AI API时发生错误: {str(api_error)}")
             import traceback
