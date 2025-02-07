@@ -101,7 +101,7 @@ def generate_ai_prediction(user_data):
                 "https://open.bigmodel.cn/api/paas/v4/chat/completions",
                 headers=headers,
                 json=request_data,
-                timeout=30  # 添加超时设置
+                timeout=25  # 增加超时时间
             )
             
             print(f"API响应状态码: {response.status_code}")
@@ -155,7 +155,11 @@ def generate_ai_prediction(user_data):
         except Exception as api_error:
             print(f"调用智谱AI API时发生错误: {str(api_error)}")
             import traceback
-            print(f"API调用错误详情:\n{traceback.format_exc()}")
+            print(f"错误详情:\n{traceback.format_exc()}")
+            return jsonify({
+                "error": "抱歉，预测生成超时，请稍后再试。如果问题持续存在，请联系管理员。",
+                "details": str(api_error)
+            }), 500
         
         return generate_fallback_prediction(user_data)
             
